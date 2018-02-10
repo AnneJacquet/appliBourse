@@ -1,1 +1,1 @@
-let app = angular.module('bourse', []);
+let app = angular.module('bourse', ['ngMaterial']);

@@ -6,55 +6,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="libs/bootstrap.min.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.6/angular-material.min.css">
+
     <link rel="stylesheet" type="text/css" href="css/main.css">
 
     <title>Projet JS</title>
 </head>
 
 <body ng-app="bourse">
-<div class="container-fluid border-0">
-    <div class="main">
-        <!-- first row -->
-        <div class="row">
-            <!-- 1_1 -->
-            <div class="col" ng-controller='MarketController'>
+
+
+<md-grid-list md-cols="2" md-row-height="2:1">
+
+
+    <md-grid-tile md-colspan="2">
+        <div layout="row" flex>
+            <div flex ng-controller='MarketController'>
 
                 <h2>Market</h2>
                 <market/>
 
             </div>
-            <!-- 1_2 -->
-            <div class="col">
-                <canvas id="chart"></canvas>
-            </div>
-
+            <div flex>2</div>
         </div>
+    </md-grid-tile>
 
-        <!-- second row -->
 
-        <div class="row" ng-controller='WalletController'>
-
-            <!-- 2_1 -->
-            <div class="col" id='wallet'>
+    <md-grid-tile md-colspan="2">
+        <div layout="row" flex ng-controller='WalletController'>
+            <div flex>
                 <h2>Wallet</h2>
                 <wallet/>
             </div>
-
-            <!-- 2_2 -->
-            <div class="col" id='action'>
+            <div flex>
                 <h2>Détails</h2>
                 <action/>
             </div>
         </div>
-    </div>
-</div>
+    </md-grid-tile>
+
+
+</md-grid-list>
+
+
 </body>
 
 
-<script type="text/javascript" src="libs/jquery-3.3.1.js"></script>
-<script type="text/javascript" src="libs/angular.min.js"></script>
-<script type="text/javascript" src="libs/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-messages.min.js"></script>
+
+<!-- AngularJS Material Javascript now available via Google CDN; version 1.1.4 used here -->
+<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.6/angular-material.min.js"></script>
 
 
 <script type="text/javascript" src="app/app.js"></script>
