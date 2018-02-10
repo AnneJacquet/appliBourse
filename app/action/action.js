@@ -11,8 +11,10 @@ app.service('Action', [function() {
         console.log(this);
         console.log(number);
     };
-    Action.prototype.sell = function() {
-        console.log("sell : "+this);
+    Action.prototype.sell = function(number) {
+        console.log("sell : ");
+        console.log(this);
+        console.log(number);
     };
     return Action;
 }]);
