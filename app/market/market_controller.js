@@ -21,7 +21,6 @@ app.controller('MarketController',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true,
-                fullscreen: $scope.customFullscreen,
                 locals : {
                     action : action
                 }
@@ -39,10 +38,8 @@ app.controller('MarketController',
                 $mdDialog.cancel();
             };
 
-            $scope.buy = function (answer) {
-                console.log("action to buy");
-                console.log($scope.choosenNumber);
-                console.log(action);
+            $scope.buy = function () {
+                action.buy($scope.choosenNumber);
                 $mdDialog.hide();
             };
         }

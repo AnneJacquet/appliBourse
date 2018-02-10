@@ -28,7 +28,6 @@ app.controller('WalletController',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true,
-                fullscreen: $scope.customFullscreen,
                 locals: {
                     action: action
                 }
@@ -52,7 +51,7 @@ app.controller('WalletController',
                 $mdDialog.cancel();
             };
 
-            $scope.sell = function (answer) {
+            $scope.sell = function () {
                 action.sell($scope.choosenNumber);
                 $mdDialog.hide();
             };
