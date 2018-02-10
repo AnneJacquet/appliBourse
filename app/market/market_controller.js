@@ -48,7 +48,3 @@ app.controller('MarketController',
         }
 
     }]);
-
-
-
-
