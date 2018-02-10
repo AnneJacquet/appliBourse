@@ -1,11 +1,14 @@
-<div class="modal-header"><h2>Achat d'action</h2></div>
+<div class="modal-header">
+    <h2>Achat d'action</h2>
+</div>
 <div class="modal-body">
+    <p>{{actionToBuy.name}} : {{actionToBuy.symbol}}</p>
     <select id="numberBuy"
             ng-model="choosenNumber"
             ng-options="number for number in numberToBuy">
     </select>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="buy()">Acheter</button>
     <button class="btn" ng-click="cancel()">Annuler</button>
+    <button class="btn btn-primary" ng-click="buy()">Acheter</button>
 </div>

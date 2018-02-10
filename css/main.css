@@ -3,10 +3,10 @@
     padding-bottom: 20px;
 }
 
-.row {
-    display: flex;
+md-grid-list {
+    background-color: white;
 }
-  
+
 /*
 html, body{
     height: 100%;
