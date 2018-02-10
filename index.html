@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="libs/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+
+    <title>Projet JS</title>
+</head>
+
+<body ng-app="bourse">
+<div class="container-fluid border-0">
+    <div class="main">
+        <!-- first row -->
+        <div class="row">
+            <!-- 1_1 -->
+            <div class="col" ng-controller='MarketController'>
+
+                <h2>Market</h2>
+                <market/>
+
+            </div>
+            <!-- 1_2 -->
+            <div class="col">
+                <canvas id="chart"></canvas>
+            </div>
+
+        </div>
+
+        <!-- second row -->
+
+        <div class="row" ng-controller='WalletController'>
+
+            <!-- 2_1 -->
+            <div class="col" id='wallet'>
+                <h2>Wallet</h2>
+                <wallet/>
+            </div>
+
+            <!-- 2_2 -->
+            <div class="col" id='action'>
+                <h2>Détails</h2>
+                <action/>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+<script type="text/javascript" src="libs/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="libs/angular.min.js"></script>
+<script type="text/javascript" src="libs/bootstrap.min.js"></script>
+
+
+<script type="text/javascript" src="app/app.js"></script>
+
+<script type="text/javascript" src="app/action/action.js"></script>
+<script type="text/javascript" src="app/action/action_directive.js"></script>
+
+<script type="text/javascript" src="app/wallet/wallet.js"></script>
+<script type="text/javascript" src="app/wallet/wallet_controller.js"></script>
+<script type="text/javascript" src="app/wallet/wallet_directive.js"></script>
+
+<script type="text/javascript" src="app/market/market.js"></script>
+<script type="text/javascript" src="app/market/market_controller.js"></script>
+<script type="text/javascript" src="app/market/market_directive.js"></script>
+
+
+</html>

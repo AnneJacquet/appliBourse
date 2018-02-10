@@ -1,0 +1,30 @@
+<div class="component">
+    <input type="text" class="form-control" placeholder="Symbole" ng-model="symbol">
+</div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Prix</th>
+        <!--<th>Nombre</th>-->
+        <th>Acheter</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat='act in market.actions | filter: { name: symbol}'>
+        <td>{{act.name}}</td>
+        <td>{{act.priceActual}}</td>
+        <!--<td>-->
+            <!--<select id="numberBuy"-->
+                    <!--ng-model="act.number"-->
+                    <!--ng-options="number for number in numberToBuy">-->
+            <!--</select>-->
+        <!--</td>-->
+        <td>
+            <!--<button class="btn btn-link" ng-click="buy(act)"><i class="fas fa-cart-plus"></i></button>-->
+            <button class="btn btn-link" ng-click="confirmBuy(act)"><i class="fas fa-cart-plus"></i></button>
+        </td>
+    </tr>
+    </tbody>
+</table>

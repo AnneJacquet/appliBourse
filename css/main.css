@@ -1,0 +1,18 @@
+.component {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.row {
+    display: flex;
+}
+  
+/*
+html, body{
+    height: 100%;
+}
+
+.row{
+    width: 100vw;
+    height: 50vh;
+}*/
