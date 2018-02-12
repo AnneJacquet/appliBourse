@@ -1,8 +1,8 @@
 app.controller('WalletController',
     ['$scope', '$mdDialog', '$http', 'Wallet', 'Action', function ($scope, $mdDialog, $http, Wallet, Action) {
 
-        $http.get('http://localhost:8082/wallet').then(function (response) {
-            response.data._embedded.wallets.forEach(function (data) {
+        $http.get('http://0.0.0.0:4000/wallet').then(function (response) {
+            response.data.forEach(function (data) {
                 let newAction = new Action(data);
                 Wallet.actions.push(newAction);
             });

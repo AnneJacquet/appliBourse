@@ -1,8 +1,8 @@
 app.controller('MarketController',
     ['$scope', '$mdDialog', '$http', 'Market', 'Action', function ($scope, $mdDialog, $http, Market, Action) {
 
-        $http.get('http://localhost:8082/market').then(function (response) {
-            response.data._embedded.markets.forEach(function (data) {
+        $http.get('http://0.0.0.0:4000/market').then(function (response) {
+            response.data.forEach(function (data) {
                 let newAction = new Action(data);
                 Market.actions.push(newAction);
             });
