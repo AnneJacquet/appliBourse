@@ -11,7 +11,7 @@ app.service('Action', ['$http', function($http) {
         console.log(this);
         console.log(number);
         this.number = number;
-        $http.post('http://localhost:8082/wallet', this).then(function(response) {
+        $http.post('http://0.0.0.0:4000/wallet', this).then(function(response) {
             console.log('ok');
         }, function(error) { console.log(error); });
     };

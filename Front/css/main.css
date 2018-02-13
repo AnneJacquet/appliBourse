@@ -7,12 +7,33 @@ md-grid-list {
     background-color: white;
 }
 
-/*
-html, body{
-    height: 100%;
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
 }
 
-.row{
-    width: 100vw;
-    height: 50vh;
-}*/
+thead{
+    background:#1ABC9C;
+    color:white;
+}
+
+th,td{
+    padding:5px 0;
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+}
+
+thead, tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+tbody {
+    display: block;
+    max-height: 200px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}

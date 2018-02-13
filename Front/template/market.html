@@ -2,17 +2,19 @@
     <input type="text" class="form-control" placeholder="Symbole" ng-model="symbol">
 </div>
 
-<table class="table">
+<table>
     <thead>
     <tr>
         <th>Nom</th>
+        <th>Symbol</th>
         <th>Prix</th>
         <th>Acheter</th>
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat='act in market.actions | filter: { name: symbol}'>
+    <tr ng-repeat='act in market.actions | filter: { symbol: symbol}'>
         <td>{{act.name}}</td>
+        <td>{{act.symbol}}</td>
         <td>{{act.priceActual}}</td>
         <td>
             <button class="btn btn-link" ng-click="confirmBuy(act, $event)"><i class="fas fa-cart-plus"></i></button>
@@ -20,4 +22,3 @@
     </tr>
     </tbody>
 </table>
-

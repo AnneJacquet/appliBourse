@@ -1,16 +1,29 @@
 var express = require('express');
 var router = express.Router();
+var request = require('request');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-    var market = [];
-    var act1 = {name:"goole", symbol:"goo", priceBuy:15, priceActual:10, number:"1"};
-    var act2 = {name:"facebook", symbol:"fb", priceBuy:20, priceActual:3, number:"1"};
 
-    market.push(act1);
-    market.push(act2);
+/* GET ALL SYMBOL */
+router.get('/', function (req, res) {
+    let market = [];
 
-    res.send(market);
+    request('https://api.iextrading.com/1.0/ref-data/symbols', function (error, response, body) {
+        console.log('error:', error);
+        console.log('statusCode:', response && response.statusCode);
+
+        {
+            JSON.parse(body).forEach(function (data) {
+                let action = {name: data.name, symbol: data.symbol};
+                console.log(action);
+                market.push(action);
+
+            });
+            res.send(market);
+        }
+
+    });
+
+
 });
 
 module.exports = router;

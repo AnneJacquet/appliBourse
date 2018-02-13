@@ -13,4 +13,12 @@ router.get('/', function(req, res, next) {
     res.send(wallet);
 });
 
+
+router.post('/', function(req, res) {
+    console.log(req.body);
+    res.status(201).end();
+});
+
+
+
 module.exports = router;
