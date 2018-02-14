@@ -28,3 +28,5 @@ nbdist/
 .DS_Store
 **/.DS_Store
 lib/
+Back/node_modules/
+

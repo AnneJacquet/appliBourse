@@ -1,5 +1,5 @@
 <div class="component">
-    <input type="text" class="form-control" placeholder="Symbole" ng-model="symbol">
+    <input type="text" class="form-control" placeholder="Symbole" ng-model="symbol" ng-keyup="show(symbol)">
 </div>
 
 <table>
@@ -12,7 +12,8 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat='act in market.actions | filter: { symbol: symbol}'>
+    <tr ng-repeat='act in market.actions'>
+        <!--| filter: { symbol: symbol}-->
         <td>{{act.name}}</td>
         <td>{{act.symbol}}</td>
         <td>{{act.priceActual}}</td>

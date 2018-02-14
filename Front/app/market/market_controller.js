@@ -1,15 +1,18 @@
 app.controller('MarketController',
     ['$scope', '$mdDialog', '$http', 'Market', 'Action', function ($scope, $mdDialog, $http, Market, Action) {
 
-        $http.get('http://0.0.0.0:4000/market').then(function (response) {
-            response.data.forEach(function (data) {
-                let newAction = new Action(data);
-                Market.actions.push(newAction);
+        $scope.show = function (symbol) {
+            Market = {actions: []};
+            $http.get('http://0.0.0.0:4000/market/' + symbol).then(function (response) {
+                response.data.forEach(function (data) {
+                    let newAction = new Action(data);
+                    Market.actions.push(newAction);
+                });
+                $scope.market = Market;
+            }, function (error) {
+                console.log(error);
             });
-            $scope.market = Market;
-        }, function (error) {
-            console.log(error);
-        });
+        };
 
 
         //modal is open when click buy
@@ -21,8 +24,8 @@ app.controller('MarketController',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true,
-                locals : {
-                    action : action
+                locals: {
+                    action: action
                 }
             })
         };
