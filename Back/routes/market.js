@@ -4,6 +4,7 @@ var axios = require('axios');
 
 
 prepare();
+let market = [];
 
 
 function prepare() {
@@ -11,8 +12,8 @@ function prepare() {
     //get all symbols
         .then(response => getAllSymbol(response))
         //split by chunks of 100
-        .then(market => chunkArray(market, 100))
-        .then(splitArray => )
+        .then(symbols => chunkMap(symbols, 100))
+        .then(map => getPrice(map))
         .catch(error => {
             console.log(error);
         });
@@ -20,25 +21,42 @@ function prepare() {
 
 
 function getAllSymbol(response) {
-    let market = [];
+    let symbols = new Map();
     response.data.forEach(function (data) {
-        let action = {name: data.name, symbol: data.symbol};
-        market.push(action);
+        symbols.set(data.symbol, data.name);
     });
-    console.log("number of symbols " + market.length);
-    return market;
+    console.log("number of symbols " + symbols.size);
+    return symbols;
 }
 
-function chunkArray(myArray, chunk_size) {
-    let results = [];
 
-    while (myArray.length) {
-        results.push(myArray.splice(0, chunk_size))
+function chunkMap(map, chunkSize) {
+    let chunkedMaps = [];
+    let mapAsArray = Array.from(map);
+    for (let i = 0; i < map.size; i += chunkSize) {
+        let chunked = mapAsArray.slice(i, i + chunkSize);
+        chunkedMaps.push(new Map(chunked))
     }
+    console.log("number of chunks " + chunkedMaps.length);
+    return chunkedMaps
+}
 
-    console.log("number of chunks " + results.length);
-
-    return results;
+function getPrice(chunkedMaps) {
+    chunkedMaps.forEach(function (map) {
+        let list = Array.from(map.keys()).join(',');
+        // axios.get('https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb&types=price')
+        axios.get('https://api.iextrading.com/1.0/stock/market/batch?symbols=' + list + '+&types=price')
+            .then(response => {
+                map.forEach(function (value, key) {
+                    if (Object.keys(response.data).includes(key)){
+                        let tmp = response.data[key];
+                        let action = {symbol: key, name: value, priceActual: tmp.price};
+                        market.push(action);
+                    }
+                });
+            })
+            .catch(error => console.log(error))
+    });
 }
 
 
@@ -48,74 +66,7 @@ router.get('/:symbol', function (req, res) {
     let result = market.filter(action => action.symbol.startsWith(symbol.toUpperCase()));
     result = result.slice(0, 100);
 
-
-    axios.all([
-        result.forEach(function (data) {
-            axios.get('https://api.iextrading.com/1.0/stock/' + data.symbol + '/price')
-                .then(price => {
-                    data.priceActual = price.data;
-                    // data.priceActual = price.data;
-                    let pk = price.data;
-                    console.log(pk);
-                    //console.log("this is th eprice !! ");
-                    //console.log(price);
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        })
-    ])
-        .then(axios.spread(() => {
-            console.log("all dine");
-            console.log(result.length);
-            res.send(result);
-        }));
-
-
-    /*    request('https://api.iextrading.com/1.0/ref-data/symbols', function (error, response, body) {
-            console.log('error:', error);
-            console.log('statusCode:', response && response.statusCode);
-
-            {
-                JSON.parse(body).forEach(function (data) {
-                    let action = {name: data.name, symbol: data.symbol};
-                    console.log(action);
-                    market.push(action);
-
-                });
-                res.send(market);
-            }
-
-        });*/
-
-    // axios.get('https://api.iextrading.com/1.0/ref-data/symbols')
-    //     .then(response => {
-    //         console.log(response.data.length);
-    //         response.data.forEach(function (data) {
-    //             let action = {name: data.name, symbol: data.symbol};
-    //             // console.log(action);
-    //             market.push(action);
-    //
-    //         });
-    //         res.send(market);
-    //     })
-    //     // .then(() => {
-    //     //     market.forEach(function (data) {
-    //     //         axios.get('https://api.iextrading.com/1.0/stock/ALL-A/price')
-    //     //             .then(price => {
-    //     //                // data.priceActual = price.data;
-    //     //                 let pk = price.data;
-    //     //                 //console.log("this is th eprice !! ");
-    //     //                 //console.log(price);
-    //     //             })
-    //     //             .catch(error => {
-    //     //                 console.log(error);
-    //     //             });
-    //     //     })
-    //     // })
-    //     .catch(error => {
-    //         console.log(error);
-    //     });
+    res.send(result);
 
 
 });

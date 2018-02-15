@@ -1,17 +1,22 @@
 app.controller('MarketController',
     ['$scope', '$mdDialog', '$http', 'Market', 'Action', function ($scope, $mdDialog, $http, Market, Action) {
 
+
         $scope.show = function (symbol) {
             Market = {actions: []};
-            $http.get('http://0.0.0.0:4000/market/' + symbol).then(function (response) {
-                response.data.forEach(function (data) {
-                    let newAction = new Action(data);
-                    Market.actions.push(newAction);
+            if (symbol) {
+                $http.get('http://0.0.0.0:4000/market/' + symbol).then(function (response) {
+                    response.data.forEach(function (data) {
+                        let newAction = new Action(data);
+                        Market.actions.push(newAction);
+                    });
+                    $scope.market = Market;
+                }, function (error) {
+                    console.log(error);
                 });
+            } else {
                 $scope.market = Market;
-            }, function (error) {
-                console.log(error);
-            });
+            }
         };
 
 
