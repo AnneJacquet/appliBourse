@@ -1,13 +1,22 @@
 app.controller('MarketController',
-    ['$scope', '$mdDialog', '$http', 'Market', 'Action', function ($scope, $mdDialog, $http, Market, Action) {
+    ['$scope', '$mdDialog', '$http', '$timeout', 'Market', 'ActionMarket', function ($scope, $mdDialog, $http, $timeout, Market, ActionMarket) {
 
+        var inputChangedPromise;
 
         $scope.show = function (symbol) {
+            if (inputChangedPromise) {
+                $timeout.cancel(inputChangedPromise);
+            }
+            inputChangedPromise = $timeout(() => getMarket(symbol), 300);
+        };
+
+
+        function getMarket(symbol) {
             Market = {actions: []};
             if (symbol) {
                 $http.get('http://0.0.0.0:4000/market/' + symbol).then(function (response) {
                     response.data.forEach(function (data) {
-                        let newAction = new Action(data);
+                        let newAction = new ActionMarket(data);
                         Market.actions.push(newAction);
                     });
                     $scope.market = Market;
@@ -17,7 +26,7 @@ app.controller('MarketController',
             } else {
                 $scope.market = Market;
             }
-        };
+        }
 
 
         //modal is open when click buy

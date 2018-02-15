@@ -8,6 +8,8 @@
         <th>Nom</th>
         <th>Symbol</th>
         <th>Prix</th>
+        <th>Hier</th>
+        <th>Mois</th>
         <th>Acheter</th>
     </tr>
     </thead>
@@ -17,6 +19,8 @@
         <td>{{act.name}}</td>
         <td>{{act.symbol}}</td>
         <td>{{act.priceActual}}</td>
+        <td>{{act.yesterday}}</td>
+        <td>{{act.lastMonth}}</td>
         <td>
             <button class="btn btn-link" ng-click="confirmBuy(act, $event)"><i class="fas fa-cart-plus"></i></button>
         </td>

@@ -23,7 +23,9 @@ function prepare() {
 function getAllSymbol(response) {
     let symbols = new Map();
     response.data.forEach(function (data) {
-        symbols.set(data.symbol, data.name);
+        if (data.symbol.match(/^[0-9a-zA-Z]+$/)) {
+            symbols.set(data.symbol, data.name);
+        }
     });
     console.log("number of symbols " + symbols.size);
     return symbols;
@@ -45,13 +47,23 @@ function getPrice(chunkedMaps) {
     chunkedMaps.forEach(function (map) {
         let list = Array.from(map.keys()).join(',');
         // axios.get('https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb&types=price')
-        axios.get('https://api.iextrading.com/1.0/stock/market/batch?symbols=' + list + '+&types=price')
+        axios.get('https://api.iextrading.com/1.0/stock/market/batch?symbols=' + list + '&types=price,chart&range=1m&last=1')
             .then(response => {
                 map.forEach(function (value, key) {
-                    if (Object.keys(response.data).includes(key)){
+                    if (Object.keys(response.data).includes(key)) {
                         let tmp = response.data[key];
-                        let action = {symbol: key, name: value, priceActual: tmp.price};
-                        market.push(action);
+                        if (tmp.price != null && tmp.chart.length > 0) {
+                            let yesterday = tmp.chart[tmp.chart.length - 1];
+                            let lastMonth = tmp.chart[0];
+                            let action = {
+                                symbol: key,
+                                name: value,
+                                priceActual: tmp.price,
+                                yesterday : yesterday.close,
+                                lastMonth : lastMonth.close
+                            };
+                            market.push(action);
+                        }
                     }
                 });
             })
