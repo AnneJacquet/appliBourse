@@ -8,8 +8,13 @@
         <th>Nom</th>
         <th>Symbol</th>
         <th>Prix</th>
-        <th>Hier</th>
-        <th>Mois</th>
+        <th>Evolution<br>
+            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                <button type="button" class="btn btn-secondary" ng-click="evol = 'month'">Mois</button>
+                <button type="button" class="btn btn-secondary" ng-click="evol = 'day'">Jour</button>
+            </div>
+        </th>
+        <!--<th>Mois</th>-->
         <th>Acheter</th>
     </tr>
     </thead>
@@ -19,8 +24,22 @@
         <td>{{act.name}}</td>
         <td>{{act.symbol}}</td>
         <td>{{act.priceActual}}</td>
-        <td>{{act.yesterday}}</td>
-        <td>{{act.lastMonth}}</td>
+        <td ng-show="evol == 'day'"
+                ng-class="{red : (act.priceActual - act.yesterday)<0, green : (act.priceActual - act.yesterday)>=0}">
+            <i class="{{(act.priceActual - act.yesterday)<0 ? 'fas fa-chevron-circle-down' : 'fas fa-chevron-circle-up'}}"></i>
+            {{(act.priceActual - act.yesterday).toFixed(2)}}
+            <br>
+            ({{(((act.priceActual - act.yesterday)/act.yesterday)*100).toFixed(2)}}%)
+        </td>
+        <td ng-show="evol != 'day'"
+            ng-class="{red : (act.priceActual - act.lastMonth)<0, green : (act.priceActual - act.lastMonth)>=0}">
+            <i class="{{(act.priceActual - act.lastMonth)<0 ? 'fas fa-chevron-circle-down' : 'fas fa-chevron-circle-up'}}"></i>
+            {{(act.priceActual - act.lastMonth).toFixed(2)}}
+            <br>
+            ({{(((act.priceActual - act.lastMonth)/act.lastMonth)*100).toFixed(2)}}%)
+        </td>
+        <!--<td>{{(act.priceActual - act.lastMonth).toFixed(2)}} <br>-->
+        <!--{{(((act.priceActual - act.lastMonth)/act.lastMonth)*100).toFixed(2)}}%</td>-->
         <td>
             <button class="btn btn-link" ng-click="confirmBuy(act, $event)"><i class="fas fa-cart-plus"></i></button>
         </td>

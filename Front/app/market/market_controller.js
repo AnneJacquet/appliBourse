@@ -1,7 +1,9 @@
 app.controller('MarketController',
     ['$scope', '$mdDialog', '$http', '$timeout', 'Market', 'ActionMarket', function ($scope, $mdDialog, $http, $timeout, Market, ActionMarket) {
 
-        var inputChangedPromise;
+        $scope.evol = "day";
+
+        let inputChangedPromise;
 
         $scope.show = function (symbol) {
             if (inputChangedPromise) {
