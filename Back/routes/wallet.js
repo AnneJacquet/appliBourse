@@ -1,12 +1,12 @@
 var express = require('express');
 var router = express.Router();
-
+var axios = require('axios');
 var mongoose = require('mongoose');
 
 
 var db = mongoose.connect('mongodb://localhost/bourseDB');
 
-const wallet = mongoose.model('Wallet',
+const Wallet = mongoose.model('Wallet',
     {
         name: String,
         symbol: String,
@@ -15,21 +15,49 @@ const wallet = mongoose.model('Wallet',
     });
 
 
-//return all actions available in the wallet
+//get current price of a symbol
+function getPrice(symbol) {
+    return new Promise(function (resolve, reject) {
+        axios.get('https://api.iextrading.com/1.0/stock/' + symbol + "/price")
+            .then(response => {
+                resolve(response.data)
+            })
+    })
+
+}
+
+
+/**
+ * RETURN ALL ACTION IN THE WALLET
+ */
 router.get('/', function (req, res, next) {
 
-   // wallet.find({}, function (err, docs) {
+    let wallet = [];
 
-  //  });
+    Wallet.find({}, function (err, actions) {
 
-    var wallet = [];
-    var act1 = {name: "twitter", symbol: "tw", priceBuy: 10, priceActual: 2, number: "10"};
-    var act2 = {name: "instagram", symbol: "insta", priceBuy: 30, priceActual: 14, number: "40"};
+        let promises = actions.map((action) => {
+            return new Promise((resolve) => {
+                getPrice(action.symbol).then(actualPrice => {
+                    let toShow = {
+                        name: action.name,
+                        symbol: action.symbol,
+                        priceBuy: action.priceBuy,
+                        number: action.number,
+                        priceActual: actualPrice
+                    };
+                    wallet.push(toShow);
+                    resolve();
+                });
+            });
+        });
 
-    wallet.push(act1);
-    wallet.push(act2);
+        Promise.all(promises).then(() => {
+            res.send(wallet)
+        });
 
-    res.send(wallet);
+    });
+
 });
 
 
@@ -37,20 +65,59 @@ router.get('/', function (req, res, next) {
  * ADD ACTIONS TO WALLET
  */
 router.post('/', function (req, res) {
-    let toAdd = {name: req.body.name, symbol: req.body.symbol, number: req.body.number, priceBuy: req.body.priceActual};
-    new wallet(toAdd).save().then(() => console.log('the action was added to the wallet'));
-    res.status(201).end();
+
+    Wallet.findOne({'symbol': req.body.symbol}, function (err, matchingAction) {
+        //if we don't have this action yet
+        if (matchingAction == null) {
+            getPrice(req.body.symbol).then(actualPrice => {
+                let toAdd = {
+                    name: req.body.name,
+                    symbol: req.body.symbol,
+                    number: req.body.number,
+                    priceBuy: actualPrice
+                };
+                new Wallet(toAdd).save().then(() => console.log('the action was added to the wallet'));
+                res.status(201).end();
+            });
+        } else {
+            getPrice(req.body.symbol).then(actualPrice => {
+                let oldPrice = matchingAction.priceBuy;
+                let oldNumber = matchingAction.number;
+                let newNumber = req.body.number;
+                matchingAction.priceBuy = ((oldPrice * oldNumber) + (newNumber * actualPrice)) / (oldNumber + newNumber)
+                matchingAction.number += req.body.number;
+                matchingAction.save();
+                res.status(201).end();
+            });
+        }
+    });
+
+
 });
 
 
 //sell actions from the wallet
 router.delete('/:symbol', function (req, res) {
+    let numberToSell = req.query.number;
     let symbol = req.params.symbol;
-    let number = req.query.number;
+    Wallet.findOne({'symbol': symbol}, function (err, matchingAction) {
+        //if we don't have this action yet
+        console.log(matchingAction);
+        if (matchingAction != null && matchingAction.number > numberToSell) {
+            getPrice(symbol).then(actualPrice => {
 
+                matchingAction.number -= numberToSell;
+                let diff = numberToSell * (actualPrice - matchingAction.priceBuy);
+                if (matchingAction.number > 0) {
+                    matchingAction.save();
+                } else {
+                    matchingAction.remove();
+                }
+                res.status(204).end();
+            });
+        }
+    });
 
-    console.log(req.body);
-    res.status(201).end();
 });
 
 
