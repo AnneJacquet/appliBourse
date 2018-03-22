@@ -44,20 +44,17 @@ router.get('/:symbol', function (req, res) {
     } else {
 
         // axios.get('https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb&types=price')
-        axios.get('https://api.iextrading.com/1.0/stock/market/batch?symbols=' + list + '&types=company,price,chart&range=1m&last=1')
+        axios.get('https://api.iextrading.com/1.0/stock/market/batch?symbols=' + list + '&types=company,price,ohlc')
             .then(response => {
                 matching.forEach(function (key) {
                     if (Object.keys(response.data).includes(key)) {
                         let tmp = response.data[key];
-                        if (tmp.price != null && tmp.chart.length > 0) {
-                            let yesterday = tmp.chart[tmp.chart.length - 1];
-                            let lastMonth = tmp.chart[0];
+                        if (tmp.price != null) {
                             let action = {
                                 symbol: key,
                                 name: tmp.company.companyName,
                                 priceActual: tmp.price,
-                                yesterday: yesterday.close,
-                                lastMonth: lastMonth.close
+                                begin : tmp.ohlc.open.price
                             };
                             result.push(action);
                         }

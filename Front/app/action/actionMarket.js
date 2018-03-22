@@ -4,8 +4,7 @@ app.service('ActionMarket', ['$http', function ($http) {
         this.symbol = data.symbol;
         this.number = data.number;
         this.priceActual = data.priceActual;
-        this.yesterday = data.yesterday;
-        this.lastMonth = data.lastMonth;
+        this.begin = data.begin;
     };
 
     return ActionMarket;
