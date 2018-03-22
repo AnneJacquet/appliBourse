@@ -103,7 +103,7 @@ router.delete('/:symbol', function (req, res) {
     Wallet.findOne({'symbol': symbol}, function (err, matchingAction) {
         //if we don't have this action yet
         console.log(matchingAction);
-        if (matchingAction != null && matchingAction.number > numberToSell) {
+        if (matchingAction != null && matchingAction.number > numberToSell && numberToSell > 0) {
             getPrice(symbol).then(actualPrice => {
 
                 matchingAction.number -= numberToSell;

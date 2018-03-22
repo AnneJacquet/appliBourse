@@ -1,16 +1,27 @@
 app.controller('WalletController',
     ['$scope', '$mdDialog', '$http', 'Wallet', 'Action', function ($scope, $mdDialog, $http, Wallet, Action) {
 
-        $http.get('http://0.0.0.0:4000/wallet').then(function (response) {
-            response.data.forEach(function (data) {
-                let newAction = new Action(data);
-                Wallet.actions.push(newAction);
-            });
-            $scope.wallet = Wallet;
-        }, function (error) {
-            console.log(error);
-        });
 
+        display();
+
+        function display() {
+            Wallet.actions = [];
+            $http.get('http://0.0.0.0:4000/wallet').then(function (response) {
+                response.data.forEach(function (data) {
+                    let newAction = new Action(data);
+                    Wallet.actions.push(newAction);
+                });
+                $scope.wallet = Wallet;
+            }, function (error) {
+                console.log(error);
+            });
+        }
+
+
+        $scope.$on('refreshWallet', function(event) {
+            console.log("called");
+            display()
+        });
 
         $scope.details = function (newAction) {
             console.log("i want details");

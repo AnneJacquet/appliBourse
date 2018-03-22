@@ -1,5 +1,6 @@
 app.controller('MarketController',
-    ['$scope', '$mdDialog', '$http', '$timeout', 'Market', 'ActionMarket', function ($scope, $mdDialog, $http, $timeout, Market, ActionMarket) {
+    ['$scope', '$rootScope', '$mdDialog', '$http', '$timeout', 'Market', 'ActionMarket',
+        function ($scope, $rootScope, $mdDialog, $http, $timeout, Market, ActionMarket) {
 
         $scope.evol = "day";
 
@@ -58,8 +59,17 @@ app.controller('MarketController',
             };
 
             $scope.buy = function () {
-                action.buy($scope.choosenNumber);
+                console.log("buy : ", action, " - ", $scope.choosenNumber);
+                action.number = $scope.choosenNumber;
+                //close the modal
                 $mdDialog.hide();
+                //add the action to the wallet
+                $http.post('http://0.0.0.0:4000/wallet', action).then(function (response) {
+                    $rootScope.$broadcast('refreshWallet');
+                }, function (error) {
+                    console.log(error);
+                });
+
             };
         }
 
