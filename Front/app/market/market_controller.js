@@ -2,8 +2,6 @@ app.controller('MarketController',
     ['$scope', '$rootScope', '$mdDialog', '$http', '$timeout', 'Market', 'ActionMarket',
         function ($scope, $rootScope, $mdDialog, $http, $timeout, Market, ActionMarket) {
 
-            $scope.evol = "day";
-
             let inputChangedPromise;
 
             $scope.show = function (symbol) {
@@ -65,6 +63,7 @@ app.controller('MarketController',
                     $mdDialog.hide();
                     //add the action to the wallet
                     $http.post('http://0.0.0.0:4000/wallet', action).then(function (response) {
+                        //refresh the walled ui
                         $rootScope.$broadcast('refreshWallet');
                     }, function (error) {
                         console.log(error);

@@ -15,6 +15,13 @@ const Wallet = mongoose.model('Wallet',
     });
 
 
+const Money = mongoose.model('Money',
+    {
+        amount: Number,
+        date: Date
+    });
+
+
 //get current price of a symbol
 function getPrice(symbol) {
     return new Promise(function (resolve, reject) {
@@ -76,6 +83,7 @@ router.post('/', function (req, res) {
                     number: req.body.number,
                     priceBuy: actualPrice
                 };
+                updateMoney(-1 * toAdd.number * toAdd.priceBuy);
                 new Wallet(toAdd).save().then(() => console.log('the action was added to the wallet'));
                 res.status(201).end();
             });
@@ -84,6 +92,7 @@ router.post('/', function (req, res) {
                 let oldPrice = matchingAction.priceBuy;
                 let oldNumber = matchingAction.number;
                 let newNumber = req.body.number;
+                updateMoney(-1 * newNumber * actualPrice);
                 matchingAction.priceBuy = ((oldPrice * oldNumber) + (newNumber * actualPrice)) / (oldNumber + newNumber)
                 matchingAction.number += req.body.number;
                 matchingAction.save();
@@ -96,18 +105,20 @@ router.post('/', function (req, res) {
 });
 
 
-//sell actions from the wallet
+/**
+ * SELL ACTIONS FROM THE WALLET
+ */
 router.delete('/:symbol', function (req, res) {
     let numberToSell = req.query.number;
     let symbol = req.params.symbol;
     Wallet.findOne({'symbol': symbol}, function (err, matchingAction) {
-        //if we don't have this action yet
-        console.log(matchingAction);
-        if (matchingAction != null && matchingAction.number > numberToSell && numberToSell > 0) {
+        //if we can sell this amount of this action
+        if (matchingAction != null && matchingAction.number >= numberToSell && numberToSell > 0) {
             getPrice(symbol).then(actualPrice => {
 
                 matchingAction.number -= numberToSell;
-                let diff = numberToSell * (actualPrice - matchingAction.priceBuy);
+                let diff = numberToSell * actualPrice;
+                updateMoney(diff);
                 if (matchingAction.number > 0) {
                     matchingAction.save();
                 } else {
@@ -118,6 +129,34 @@ router.delete('/:symbol', function (req, res) {
         }
     });
 
+});
+
+
+function updateMoney(change) {
+    Money.findOne({}).sort({date: -1}).exec(
+        function (err, currentMoney) {
+            //if we can sell this amount of this action
+            let toAdd = {
+                date: new Date()
+            };
+            if (currentMoney == null) {
+                toAdd.amount = change;
+            } else {
+                toAdd.amount = change + currentMoney.amount;
+            }
+            new Money(toAdd).save();
+        });
+}
+
+
+/**
+ * RETURN HISTORY OF MONEY
+ */
+router.get('/history', function (req, res) {
+    Money.find({}).sort({date: -1}).select('date amount -_id').exec(
+        function (err, history) {
+            res.send(history)
+        });
 });
 
 

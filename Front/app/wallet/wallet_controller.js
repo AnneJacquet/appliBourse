@@ -18,7 +18,7 @@ app.controller('WalletController',
         }
 
 
-        $scope.$on('refreshWallet', function(event) {
+        $scope.$on('refreshWallet', function (event) {
             console.log("called");
             display()
         });
@@ -49,7 +49,6 @@ app.controller('WalletController',
         function DialogController($scope, $mdDialog, action) {
 
             $scope.choosenNumber = 1;
-
             $scope.numberToBuy = [];
 
             for (var i = 1; i <= action.number; i++) {
@@ -63,9 +62,16 @@ app.controller('WalletController',
             };
 
             $scope.sell = function () {
-                action.sell($scope.choosenNumber);
+                console.log("sell : ", action, " - ", $scope.choosenNumber);
+                $http.delete('http://0.0.0.0:4000/wallet/' + action.symbol + "?number=" + $scope.choosenNumber)
+                    .then(function (response) {
+                        display();
+                    }, function (error) {
+                        console.log(error);
+                    });
                 $mdDialog.hide();
             };
         }
 
     }]);
+
