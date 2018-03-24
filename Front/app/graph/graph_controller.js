@@ -1,5 +1,8 @@
 app.controller('GraphController', ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
 
+    $scope.$on('refreshGraph', function (event) {
+        $scope.drawMoney();
+    });
 
     $scope.drawMoney = function () {
         angular.element(document).ready(function () {
@@ -35,6 +38,7 @@ app.controller('GraphController', ['$scope', '$rootScope', '$http', function ($s
         })
     };
 
+    //to view the evolution of the given symbol
     $scope.$on('viewGraph', function (event, symbol) {
         $scope.symbolEvol = symbol;
         initSymbolEvol();

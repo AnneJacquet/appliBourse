@@ -1,5 +1,5 @@
 app.controller('WalletController',
-    ['$scope', '$mdDialog', '$http', 'Wallet', 'Action', function ($scope, $mdDialog, $http, Wallet, Action) {
+    ['$scope', '$rootScope', '$mdDialog', '$http', 'Wallet', 'Action', function ($scope, $rootScope, $mdDialog, $http, Wallet, Action) {
 
 
         display();
@@ -17,9 +17,7 @@ app.controller('WalletController',
             });
         }
 
-
         $scope.$on('refreshWallet', function (event) {
-            console.log("called");
             display()
         });
 
@@ -65,7 +63,8 @@ app.controller('WalletController',
                 console.log("sell : ", action, " - ", $scope.choosenNumber);
                 $http.delete('http://0.0.0.0:4000/wallet/' + action.symbol + "?number=" + $scope.choosenNumber)
                     .then(function (response) {
-                        display();
+                        display(); //refresh wall ui
+                        $rootScope.$broadcast('refreshGraph'); //refresh graph ui
                     }, function (error) {
                         console.log(error);
                     });

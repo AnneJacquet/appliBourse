@@ -8,7 +8,7 @@ app.controller('MarketController',
                 if (inputChangedPromise) {
                     $timeout.cancel(inputChangedPromise);
                 }
-                inputChangedPromise = $timeout(() => getMarket(symbol), 100);
+                inputChangedPromise = $timeout(() => getMarket(symbol), 300);
             };
 
 
@@ -70,6 +70,7 @@ app.controller('MarketController',
                     $http.post('http://0.0.0.0:4000/wallet', action).then(function (response) {
                         //refresh the walled ui
                         $rootScope.$broadcast('refreshWallet');
+                        $rootScope.$broadcast('refreshGraph');
                     }, function (error) {
                         console.log(error);
                     });
