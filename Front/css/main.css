@@ -7,6 +7,11 @@ md-grid-list {
     background-color: white;
 }
 
+button{
+    background-color:#1ABC9C;
+    color:white;
+}
+
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;

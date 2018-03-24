@@ -8,7 +8,12 @@ app.controller('MarketController',
                 if (inputChangedPromise) {
                     $timeout.cancel(inputChangedPromise);
                 }
-                inputChangedPromise = $timeout(() => getMarket(symbol), 300);
+                inputChangedPromise = $timeout(() => getMarket(symbol), 100);
+            };
+
+
+            $scope.viewGraph = function(symbol){
+                $rootScope.$broadcast('viewGraph', symbol);
             };
 
 

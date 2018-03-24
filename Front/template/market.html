@@ -1,7 +1,6 @@
 <div class="component">
     <input type="text" class="form-control" placeholder="Symbole" ng-model="symbol" ng-keyup="show(symbol)">
 </div>
-
 <table>
     <thead>
     <tr>
@@ -9,15 +8,14 @@
         <th>Symbol</th>
         <th>Prix</th>
         <th>Evolution</th>
-        <!--<th>Mois</th>-->
         <th>Acheter</th>
+        <th>Courbe</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat='act in market.actions'>
-        <!--| filter: { symbol: symbol}-->
         <td>{{act.name}}</td>
-        <td>{{act.symbol}}</td>yes
+        <td>{{act.symbol}}</td>
         <td>{{act.priceActual}}</td>
         <td ng-class="{red : (act.priceActual - act.begin)<0, green : (act.priceActual - act.begin)>=0}">
             <i class="{{(act.priceActual - act.begin)<0 ? 'fas fa-chevron-circle-down' : 'fas fa-chevron-circle-up'}}"></i>
@@ -25,10 +23,11 @@
             <br>
             ({{(((act.priceActual - act.begin)/act.begin)*100).toFixed(2)}}%)
         </td>
-        <!--<td>{{(act.priceActual - act.lastMonth).toFixed(2)}} <br>-->
-        <!--{{(((act.priceActual - act.lastMonth)/act.lastMonth)*100).toFixed(2)}}%</td>-->
         <td>
             <button class="btn btn-link" ng-click="confirmBuy(act, $event)"><i class="fas fa-cart-plus"></i></button>
+        </td>
+        <td>
+            <button class="btn btn-link" ng-click="viewGraph(act.symbol)"><i class="fas fa-chart-line"></i></button>
         </td>
     </tr>
     </tbody>

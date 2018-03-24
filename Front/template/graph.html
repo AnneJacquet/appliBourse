@@ -1,3 +1,18 @@
-<di>
-    hello !
-</di>
+<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+    <button type="button" class="btn btn-secondary" ng-click="drawMoney()">My Wallet</button>
+
+    <div class="btn-group" role="group" ng-show="symbolEvol != null">
+        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+            Time
+        </button>
+        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+            <a class="dropdown-item" href="#" ng-click="onRangeChange('1d')">Jour</a>
+            <a class="dropdown-item" href="#" ng-click="onRangeChange('1m')">Mois</a>
+            <a class="dropdown-item" href="#" ng-click="onRangeChange('1y')">Annee</a>
+        </div>
+    </div>
+</div>
+
+<div id="graph">
+</div>
