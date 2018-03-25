@@ -22,9 +22,10 @@ app.controller('WalletController',
         });
 
         $scope.details = function (newAction) {
-            console.log("i want details");
-            console.log(newAction);
-            $scope.action = newAction;
+            $http.get('http://0.0.0.0:4000/wallet/' + newAction.symbol).then(function (response) {
+                newAction.priceActual = response.data;
+                $scope.action = newAction;
+            });
         };
 
 

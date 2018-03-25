@@ -3,7 +3,7 @@
     <tr>
         <th>Symbole</th>
         <th>Nombre</th>
-        <th>Différence de prix depuis achat</th>
+        <th>Prix d'achat</th>
         <th>Details</th>
         <th>Vendre</th>
     </tr>
@@ -12,11 +12,7 @@
     <tr ng-repeat='act in wallet.actions'>
         <td>{{act.symbol}}</td>
         <td>{{act.number}}</td>
-        <td ng-class="{red : (act.priceActual - act.priceBuy)<0, green : (act.priceActual - act.priceBuy)>=0}">
-            <i class="{{(act.priceActual - act.priceBuy)<0 ? 'fas fa-chevron-circle-down' : 'fas fa-chevron-circle-up'}}"></i>
-            {{(act.priceActual - act.priceBuy).toFixed(2)}}
-            <br>
-        </td>
+        <td>{{act.priceActual}}</td>
         <td>
             <button class="btn btn-link" ng-click="details(act)"><i class="fas fa-search-plus"></i></button>
         </td>
