@@ -121,11 +121,10 @@ router.delete('/:symbol', function (req, res) {
                 let diff = numberToSell * actualPrice;
                 updateMoney(diff);
                 if (matchingAction.number > 0) {
-                    matchingAction.save();
+                    matchingAction.save().then(res.status(204).end());
                 } else {
-                    matchingAction.remove();
+                    matchingAction.remove().then(res.status(204).end());
                 }
-                res.status(204).end();
             });
         }
     });
