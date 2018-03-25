@@ -4,6 +4,8 @@ app.controller('GraphController', ['$scope', '$rootScope', '$http', function ($s
         $scope.drawMoney();
     });
 
+    $scope.timeEvol ='jour';
+
     $scope.drawMoney = function () {
         angular.element(document).ready(function () {
 
@@ -65,21 +67,24 @@ app.controller('GraphController', ['$scope', '$rootScope', '$http', function ($s
 
     function drawGraph() {
         let data = new google.visualization.DataTable();
-        data.addColumn('date', 'Date');
+        data.addColumn('datetime', 'Date');
         data.addColumn('number', 'Wallet');
         data.addRows($scope.content);
 
         let options = {
+            chartArea: {
+                height: '70%',
+                top : 10
+            },
             hAxis: {
                 title: 'Time',
-                format: 'M/d/yy \nHH:mm',
-                gridlines: {count: 15}
-
+                format: 'M/d/yy \nHH:mm'
             },
             vAxis: {
                 title: 'Amount'
             },
             colors: ['#1ABC9C'],
+            legend : {position: 'top', maxLines: 2}
         };
 
         let chart = new google.visualization.LineChart(document.getElementById('graph'));

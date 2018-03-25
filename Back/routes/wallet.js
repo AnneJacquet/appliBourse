@@ -29,6 +29,7 @@ function getPrice(symbol) {
             .then(response => {
                 resolve(response.data)
             })
+            .catch(error => reject(error))
     })
 
 }
@@ -153,10 +154,25 @@ function updateMoney(change) {
  * RETURN HISTORY OF MONEY
  */
 router.get('/history', function (req, res) {
-    Money.find({}).sort({date: -1}).select('date amount -_id').exec(
-        function (err, history) {
+    Money.find({}).sort({date: -1}).select('date amount -_id')
+        .exec()
+        .then(history => {
             res.send(history)
-        });
+        })
+        .catch(error => console.log(error));
+});
+
+
+
+/**
+ * RETURN ONE ACTION IN THE WALLET
+ */
+router.get('/:symbol', function (req, res, next) {
+
+    getPrice(req.params.symbol)
+        .then(actualPrice => res.send("" + actualPrice))
+        .catch(error => console.log(error));
+
 });
 
 
