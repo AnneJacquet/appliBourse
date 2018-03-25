@@ -85,8 +85,7 @@ router.post('/', function (req, res) {
                     priceBuy: actualPrice
                 };
                 updateMoney(-1 * toAdd.number * toAdd.priceBuy);
-                new Wallet(toAdd).save().then(() => console.log('the action was added to the wallet'));
-                res.status(201).end();
+                new Wallet(toAdd).save().then(() => res.status(201).end());
             });
         } else {
             getPrice(req.body.symbol).then(actualPrice => {
@@ -96,8 +95,7 @@ router.post('/', function (req, res) {
                 updateMoney(-1 * newNumber * actualPrice);
                 matchingAction.priceBuy = ((oldPrice * oldNumber) + (newNumber * actualPrice)) / (oldNumber + newNumber)
                 matchingAction.number += req.body.number;
-                matchingAction.save();
-                res.status(201).end();
+                matchingAction.save().then(res.status(201).end());
             });
         }
     });
