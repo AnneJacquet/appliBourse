@@ -6,12 +6,19 @@
         <p class="lead">Symbole : {{action.symbol}}</p>
     </li>
     <li>
-        <p class="lead">Prix d'achat : {{action.priceBuy}}</p>
+        <p class="lead">Prix d'achat : {{action.priceBuy.toFixed(3)}}</p>
     </li>
     <li>
         <p class="lead">Nombre : {{action.number}}</p>
     </li>
     <li>
-        <p class="lead">Prix actuel : {{action.priceActual}}</p>
+        <p class="lead">Prix actuel : {{action.priceActual.toFixed(3)}}</p>
+    </li>
+    <li>
+        <div ng-class="{red : (action.priceActual - action.priceBuy)<0, green : (action.priceActual - action.priceBuy)>=0}">
+            <i class="{{(action.priceActual - action.priceBuy)<0 ? 'fas fa-chevron-circle-down' : 'fas fa-chevron-circle-up'}}"></i>
+            {{(action.priceActual - action.priceBuy).toFixed(3)}}
+            <br>
+        </div>
     </li>
 </ul>

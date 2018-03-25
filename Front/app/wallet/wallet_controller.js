@@ -23,7 +23,7 @@ app.controller('WalletController',
 
         $scope.details = function (newAction) {
             $http.get('http://0.0.0.0:4000/wallet/' + newAction.symbol).then(function (response) {
-                newAction.priceActual = response.data;
+                newAction.priceActual = parseFloat(response.data);
                 $scope.action = newAction;
             });
         };
