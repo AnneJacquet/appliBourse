@@ -1,6 +1,6 @@
 app.controller('MarketController',
-    ['$scope', '$rootScope', '$mdDialog', '$http', '$timeout', 'Market', 'ActionMarket',
-        function ($scope, $rootScope, $mdDialog, $http, $timeout, Market, ActionMarket) {
+    ['$scope', '$rootScope', '$mdDialog', '$http', '$timeout', 'ActionMarket',
+        function ($scope, $rootScope, $mdDialog, $http, $timeout, ActionMarket) {
 
             let inputChangedPromise;
 
@@ -18,7 +18,7 @@ app.controller('MarketController',
 
 
             function getMarket(symbol) {
-                Market = {actions: []};
+                let Market = {actions: []};
                 if (symbol) {
                     $http.get('http://0.0.0.0:4000/market/' + symbol).then(function (response) {
                         response.data.forEach(function (data) {

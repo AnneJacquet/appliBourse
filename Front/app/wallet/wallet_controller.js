@@ -1,11 +1,11 @@
 app.controller('WalletController',
-    ['$scope', '$rootScope', '$mdDialog', '$http', 'Wallet', 'Action', function ($scope, $rootScope, $mdDialog, $http, Wallet, Action) {
+    ['$scope', '$rootScope', '$mdDialog', '$http', 'Action', function ($scope, $rootScope, $mdDialog, $http, Action) {
 
 
         display();
 
         function display() {
-            Wallet.actions = [];
+            let Wallet = {actions: []};
             $scope.wallet = Wallet;
             $http.get('http://0.0.0.0:4000/wallet').then(function (response) {
                 response.data.forEach(function (data) {
