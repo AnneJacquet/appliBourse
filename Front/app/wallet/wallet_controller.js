@@ -6,12 +6,12 @@ app.controller('WalletController',
 
         function display() {
             Wallet.actions = [];
+            $scope.wallet = Wallet;
             $http.get('http://0.0.0.0:4000/wallet').then(function (response) {
                 response.data.forEach(function (data) {
                     let newAction = new Action(data);
-                    Wallet.actions.push(newAction);
+                    $scope.wallet.actions.push(newAction);
                 });
-                $scope.wallet = Wallet;
             }, function (error) {
                 console.log(error);
             });

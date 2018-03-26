@@ -4,12 +4,12 @@ app.controller('GraphController', ['$scope', '$rootScope', '$http', function ($s
         $scope.drawMoney();
     });
 
-    $scope.timeEvol ='jour';
+    $scope.timeEvol = 'jour';
 
     $scope.drawMoney = function () {
         angular.element(document).ready(function () {
 
-            $http.get('http://0.0.0.0:4000/wallet/history').then(function (response) {
+            $http.get('http://0.0.0.0:4000/graph/history').then(function (response) {
                 $scope.content = response.data.map(el => [new Date(el.date), el.amount]);
                 $scope.symbolEvol = null;
                 drawGraph();
@@ -25,45 +25,18 @@ app.controller('GraphController', ['$scope', '$rootScope', '$http', function ($s
 
 
     $scope.onRangeChange = function (range) {
-        $http.get('https://api.iextrading.com/1.0/stock/' + $scope.symbolEvol + '/chart/' + range).then(function (response) {
-            if (range == '1d') {
-                initSymbolEvol();
-            } else {
-                $scope.content = [];
-                response.data.forEach(entry => {
-                    if (entry.close != 0) {
-                        $scope.content.push([new Date(entry.date), entry.close]);
-                        drawGraph();
-                    }
-                });
-            }
+        $http.get('http://0.0.0.0:4000/graph/' + $scope.symbolEvol + '/' + range).then(function (response) {
+            $scope.content = response.data.map(entry => [new Date(entry[0]), entry[1]]);
+            drawGraph();
         })
     };
 
     //to view the evolution of the given symbol
     $scope.$on('viewGraph', function (event, symbol) {
         $scope.symbolEvol = symbol;
-        initSymbolEvol();
+        $scope.onRangeChange('1d');
     });
 
-
-    function initSymbolEvol() {
-        $http.get('https://api.iextrading.com/1.0/stock/' + $scope.symbolEvol + '/chart/1d').then(function (response) {
-            $scope.content = [];
-            response.data.forEach(entry => {
-                if (entry.average != 0) {
-                    year = entry.date.slice(0, 4);
-                    month = entry.date.slice(4, 6);
-                    day = entry.date.slice(6, 8);
-                    date = year + "-" + month + "-" + day + " " + entry.minute;
-                    $scope.content.push([new Date(date), entry.average]);
-                    drawGraph();
-                }
-            });
-        }, function (error) {
-            console.log(error);
-        });
-    }
 
     function drawGraph() {
         let data = new google.visualization.DataTable();
@@ -74,7 +47,7 @@ app.controller('GraphController', ['$scope', '$rootScope', '$http', function ($s
         let options = {
             chartArea: {
                 height: '70%',
-                top : 10
+                top: 10
             },
             hAxis: {
                 title: 'Time',
@@ -84,7 +57,7 @@ app.controller('GraphController', ['$scope', '$rootScope', '$http', function ($s
                 title: 'Amount'
             },
             colors: ['#1ABC9C'],
-            legend : {position: 'top', maxLines: 2}
+            legend: {position: 'top', maxLines: 2}
         };
 
         let chart = new google.visualization.LineChart(document.getElementById('graph'));

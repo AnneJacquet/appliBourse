@@ -29,17 +29,17 @@ router.get('/:symbol/:time', function (req, res) {
             let promises = response.data.map((entry) => {
                 return new Promise((resolve) => {
                     if (entry.average != 0) {
-                        if (req.params.time == '1d'){
+                        if (req.params.time == '1d') {
                             year = entry.date.slice(0, 4);
                             month = entry.date.slice(4, 6);
                             day = entry.date.slice(6, 8);
                             date = year + "-" + month + "-" + day + " " + entry.minute;
-                            results.push([new Date(date), entry.average]);
-                        }else{
-                            results.push([new Date(entry.date), entry.close]);
+                            results.push([date, entry.average]);
+                        } else {
+                            results.push([entry.date, entry.close]);
                         }
-                        resolve();
                     }
+                    resolve();
                 });
             });
 
