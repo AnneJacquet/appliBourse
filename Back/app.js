@@ -10,6 +10,7 @@ var users = require('./routes/users');
 
 var market = require('./routes/market');
 var wallet = require('./routes/wallet');
+var graphe = require('./routes/graph');
 
 var mongoose = require('mongoose');
 
@@ -43,6 +44,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/market', market);
 app.use('/wallet', wallet);
+app.use('/graph', graphe);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

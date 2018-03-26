@@ -20,6 +20,7 @@ const Money = mongoose.model('Money',
         amount: Number,
         date: Date
     });
+global.Money = Money;
 
 
 //get current price of a symbol
@@ -145,20 +146,6 @@ function updateMoney(change) {
             new Money(toAdd).save();
         });
 }
-
-
-/**
- * RETURN HISTORY OF MONEY
- */
-router.get('/history', function (req, res) {
-    Money.find({}).sort({date: -1}).select('date amount -_id')
-        .exec()
-        .then(history => {
-            res.send(history)
-        })
-        .catch(error => console.log(error));
-});
-
 
 
 /**
