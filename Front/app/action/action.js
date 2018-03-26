@@ -5,6 +5,7 @@ app.service('Action', ['$http', function ($http) {
         this.priceBuy = data.priceBuy;
         this.number = data.number;
         this.priceActual = data.priceActual;
+        this.begin = data.begin;
     };
     return Action;
 }]);

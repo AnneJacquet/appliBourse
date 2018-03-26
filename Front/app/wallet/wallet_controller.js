@@ -8,9 +8,14 @@ app.controller('WalletController',
             let Wallet = {actions: []};
             $scope.wallet = Wallet;
             $http.get('http://0.0.0.0:4000/wallet').then(function (response) {
+                let oldDetail = $scope.action == null ? '' : $scope.action.symbol;
+                $scope.action = null;
                 response.data.forEach(function (data) {
                     let newAction = new Action(data);
                     $scope.wallet.actions.push(newAction);
+                    if (newAction.symbol === oldDetail) {
+                        $scope.action = newAction;
+                    }
                 });
             }, function (error) {
                 console.log(error);
@@ -50,7 +55,7 @@ app.controller('WalletController',
             $scope.choosenNumber = 1;
             $scope.numberToBuy = [];
 
-            for (var i = 1; i <= action.number; i++) {
+            for (let i = 1; i <= action.number; i++) {
                 $scope.numberToBuy.push(i);
             }
 
