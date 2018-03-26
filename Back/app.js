@@ -6,11 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
 
 var market = require('./routes/market');
 var wallet = require('./routes/wallet');
-var graphe = require('./routes/graph');
+var graph = require('./routes/graph');
 
 var mongoose = require('mongoose');
 
@@ -41,10 +40,9 @@ app.use(function(req, res, next) {
 
 
 app.use('/', index);
-app.use('/users', users);
 app.use('/market', market);
 app.use('/wallet', wallet);
-app.use('/graph', graphe);
+app.use('/graph', graph);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
