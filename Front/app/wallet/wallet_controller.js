@@ -34,7 +34,7 @@ app.controller('WalletController',
         };
 
 
-        //modal is open when click buy
+        //modal is open when click sell
         $scope.confirmSell = function (action, ev) {
 
             $mdDialog.show({
