@@ -74,32 +74,37 @@ router.get('/', function (req, res, next) {
  * ADD ACTIONS TO WALLET
  */
 router.post('/', function (req, res) {
-
-    Wallet.findOne({'symbol': req.body.symbol}, function (err, matchingAction) {
-        //if we don't have this action yet
-        if (matchingAction == null) {
-            getPrice(req.body.symbol).then(actualPrice => {
-                let toAdd = {
-                    name: req.body.name,
-                    symbol: req.body.symbol,
-                    number: req.body.number,
-                    priceBuy: actualPrice
-                };
-                updateMoney(-1 * toAdd.number * toAdd.priceBuy);
-                new Wallet(toAdd).save().then(() => res.status(201).end());
-            });
-        } else {
-            getPrice(req.body.symbol).then(actualPrice => {
-                let oldPrice = matchingAction.priceBuy;
-                let oldNumber = matchingAction.number;
-                let newNumber = req.body.number;
-                updateMoney(-1 * newNumber * actualPrice);
-                matchingAction.priceBuy = ((oldPrice * oldNumber) + (newNumber * actualPrice)) / (oldNumber + newNumber)
-                matchingAction.number += req.body.number;
-                matchingAction.save().then(res.status(201).end());
-            });
-        }
-    });
+    //is the number of actions to buy is an integer
+    if (Number.isInteger(req.body.number)) {
+        Wallet.findOne({'symbol': req.body.symbol}, function (err, matchingAction) {
+            //if we don't have this action yet, create one
+            if (matchingAction == null) {
+                getPrice(req.body.symbol).then(actualPrice => {
+                    let toAdd = {
+                        name: req.body.name,
+                        symbol: req.body.symbol,
+                        number: req.body.number,
+                        priceBuy: actualPrice
+                    };
+                    updateMoney(-1 * toAdd.number * toAdd.priceBuy);
+                    new Wallet(toAdd).save().then(() => res.status(201).end());
+                });
+            } else {
+                //if we already have an action of this symbol, update the price and the number
+                getPrice(req.body.symbol).then(actualPrice => {
+                    let oldPrice = matchingAction.priceBuy;
+                    let oldNumber = matchingAction.number;
+                    let newNumber = req.body.number;
+                    updateMoney(-1 * newNumber * actualPrice);
+                    matchingAction.priceBuy = ((oldPrice * oldNumber) + (newNumber * actualPrice)) / (oldNumber + newNumber)
+                    matchingAction.number += req.body.number;
+                    matchingAction.save().then(res.status(201).end());
+                });
+            }
+        });
+    } else {
+        res.status(412).end();
+    }
 
 
 });
@@ -119,6 +124,7 @@ router.delete('/:symbol', function (req, res) {
                 matchingAction.number -= numberToSell;
                 let diff = numberToSell * actualPrice;
                 updateMoney(diff);
+                //if there is no acvtion left after the sell, remove it
                 if (matchingAction.number > 0) {
                     matchingAction.save().then(res.status(204).end());
                 } else {
@@ -131,10 +137,13 @@ router.delete('/:symbol', function (req, res) {
 });
 
 
+/**
+ * ADD A NEW ENTRY TO THE HISTORY OF WALLET
+ * @param change : can be negative or positive
+ */
 function updateMoney(change) {
     Money.findOne({}).sort({date: -1}).exec(
         function (err, currentMoney) {
-            //if we can sell this amount of this action
             let toAdd = {
                 date: new Date()
             };
@@ -149,7 +158,7 @@ function updateMoney(change) {
 
 
 /**
- * RETURN ONE ACTION IN THE WALLET
+ * RETURN THE ACTUAL PRICE OF ONE ACTION IN THE WALLET
  */
 router.get('/:symbol', function (req, res, next) {
 

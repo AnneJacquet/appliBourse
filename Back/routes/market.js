@@ -39,28 +39,34 @@ router.get('/:symbol', function (req, res) {
     let list = matching.join(',');
 
 
-    if (matching.length == 0) {
+    if (matching.length === 0) {
         res.send(result);
     } else {
-
-        // axios.get('https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb&types=price')
         axios.get('https://api.iextrading.com/1.0/stock/market/batch?symbols=' + list + '&types=company,price,ohlc')
             .then(response => {
-                matching.forEach(function (key) {
-                    if (Object.keys(response.data).includes(key)) {
-                        let tmp = response.data[key];
-                        if (tmp.price != null) {
-                            let action = {
-                                symbol: key,
-                                name: tmp.company.companyName,
-                                priceActual: tmp.price,
-                                begin : tmp.ohlc.open.price
-                            };
-                            result.push(action);
+                //we have to wait and check each symbol before sending a response
+                let promises = matching.map((key) => {
+                    return new Promise((resolve) => {
+                        if (Object.keys(response.data).includes(key)) {
+                            let tmp = response.data[key];
+                            if (tmp.price != null) {
+                                let action = {
+                                    symbol: key,
+                                    name: tmp.company.companyName,
+                                    priceActual: tmp.price,
+                                    begin: tmp.ohlc.open.price
+                                };
+                                result.push(action);
+                            }
                         }
-                    }
+                        resolve();
+                    });
                 });
-                res.send(result);
+
+                Promise.all(promises).then(() => {
+                    res.send(result);
+                });
+
             })
             .catch(error => console.log(error))
     }

@@ -12,7 +12,7 @@ app.controller('MarketController',
             };
 
 
-            $scope.viewGraph = function(symbol){
+            $scope.viewGraph = function (symbol) {
                 $rootScope.$broadcast('viewGraph', symbol);
             };
 
@@ -62,19 +62,20 @@ app.controller('MarketController',
                 };
 
                 $scope.buy = function () {
-                    console.log("buy : ", action, " - ", $scope.choosenNumber);
-                    action.number = $scope.choosenNumber;
-                    //close the modal
-                    $mdDialog.hide();
-                    //add the action to the wallet
-                    $http.post('http://0.0.0.0:4000/wallet', action).then(function (response) {
-                        //refresh the walled ui
-                        $rootScope.$broadcast('refreshWallet');
-                        $rootScope.$broadcast('refreshGraph');
-                    }, function (error) {
-                        console.log(error);
-                    });
-
+                    if (Number.isInteger($scope.choosenNumber)) {
+                        console.log("buy : ", action, " - ", $scope.choosenNumber);
+                        action.number = $scope.choosenNumber;
+                        //close the modal
+                        $mdDialog.hide();
+                        //add the action to the wallet
+                        $http.post('http://0.0.0.0:4000/wallet', action).then(function (response) {
+                            //refresh the walled ui
+                            $rootScope.$broadcast('refreshWallet');
+                            $rootScope.$broadcast('refreshGraph');
+                        }, function (error) {
+                            console.log(error);
+                        });
+                    }
                 };
             }
 

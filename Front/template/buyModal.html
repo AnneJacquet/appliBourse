@@ -3,10 +3,8 @@
 </div>
 <div class="modal-body">
     <p>{{actionToBuy.name}} : {{actionToBuy.symbol}}</p>
-    <select id="numberBuy"
-            ng-model="choosenNumber"
-            ng-options="number for number in numberToBuy">
     </select>
+    <input class="form-control" type="number" name="quantity" min="1" step="1" ng-model="choosenNumber">
 </div>
 <div class="modal-footer">
     <button class="btn" ng-click="cancel()">Annuler</button>
