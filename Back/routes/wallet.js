@@ -131,7 +131,10 @@ router.delete('/:symbol', function (req, res) {
                     matchingAction.remove().then(res.status(204).end());
                 }
             });
+        } else {
+            res.status(412).end();
         }
+
     });
 
 });
