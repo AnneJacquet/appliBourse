@@ -1,2 +1,2 @@
 # projetJS
-Appli bourse
+Appli bourse with MEAN stack : MongoDB, Express.js, AngularJs, Node.js
